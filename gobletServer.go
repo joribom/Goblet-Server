@@ -19,7 +19,9 @@ func htmlHandler(w http.ResponseWriter, r *http.Request) {
     file := "pages" + r.URL.Path
     fileInfo, err := os.Stat(file)
     if err != nil {
-        file = "pages/nogoblet.html" 
+        req, _ := http.NewRequest("GET", "http://gobletdeathandrebirth.com/goblet-not-found", nil)
+        htmlHandler(w, req)
+        return
     } else if fileInfo.IsDir() {
         if file[len(file) - 1:] != "/"{
             file += "/"
