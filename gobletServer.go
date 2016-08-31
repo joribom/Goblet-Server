@@ -19,15 +19,12 @@ func htmlHandler(w http.ResponseWriter, r *http.Request) {
     file := "pages" + r.URL.Path
     fileInfo, err := os.Stat(file)
     if err != nil {
-        return 
+        file = "pages/nogoblet.html" 
     } else if fileInfo.IsDir() {
         if file[len(file) - 1:] != "/"{
             file += "/"
         }
         file += "page.html"
-    }
-    if _, err := os.Stat(file); os.IsNotExist(err) {
-        file = "pages/nogoblet.html"
     }
     http.ServeFile(w, r, file)
 }
