@@ -26,5 +26,8 @@ func htmlHandler(w http.ResponseWriter, r *http.Request) {
         }
         file += "page.html"
     }
+    if _, err := os.Stat(file); os.IsNotExist(err) {
+        file = "nogoblet.html"
+    }
     http.ServeFile(w, r, file)
 }
