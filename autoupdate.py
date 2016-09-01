@@ -1,6 +1,11 @@
 #!/usr/bin/python
 import subprocess, time, re, sys
 from time import gmtime, strftime
+if len(sys.argv) != 2:
+    print sys.argv
+    print "Please provide the amount of time (seconds) between each update."
+    quit()
+t = float(sys.argv[1])
 
 def log(log_string):
     with open("update.log", 'a') as f:
@@ -19,7 +24,7 @@ try:
         base = subprocess.Popen(["git", "merge-base", "@", r"@{u}"], stdout = subprocess.PIPE).communicate()[0]
         if local == remote:
             log("No updates.")
-            time.sleep(30)
+            time.sleep(t)
         elif local == base:
             log("Pulling changes.")
             log(subprocess.Popen(["git", "pull"], stdout = subprocess.PIPE).communicate()[0])
