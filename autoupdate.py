@@ -7,7 +7,6 @@ while True:
     base = subprocess.Popen(["git", "merge-base", "@", r"@{u}"], stdout = subprocess.PIPE).communicate()[0]
     if local == remote:
         time.sleep(30)
-        break
     elif local == base:
         print "Pulling changes."
         print subprocess.Popen(["git", "pull"], stdout = subprocess.PIPE).communicate()[0]
