@@ -24,5 +24,35 @@
       <li><a href="https://www.facebook.com/gobdevofficial/"><img src="../facebook.png" style="height: 18px"></a></li>
   </ul>
 
+  <div id="map" style="width:350px;height:350px"></div>
+  <div id="info" style="width:350px;height:430px">
+    <p><b>Contact:</b></p>
+    <a href="mailto:contact@gobletdeathandrebirth.com?Subject=Hello%20again">contact@gobletdeathandrebirth.com</a>
+
+    <p><b>Location: </b></p>
+    Stockholm, Sweden
+    <p><b>Developers: </b></p>
+    <i>Lead developer</i>: Johan Ribom <br>
+    <i>Lead graphic designer</i>: Simon Edström-Kawaji <br>
+    <i>Lead website developer</i>: Erik Johansson <br>
+    <i> Assistive developer</i>: Alexander Bladh <br><br>
+    <p><b>Contributions: </b></p>
+    <a href="https://www.kth.se/student/kurser/kurs/DD1349">Projektarbete i datalogi DD1349</a>
+
+  </div>
+
+
+  <script>
+  function myMap() {
+    var myCenter = new google.maps.LatLng(59.347308, 18.072876);
+    var mapCanvas = document.getElementById("map");
+    var mapOptions = {center: myCenter, zoom: 16};
+    var map = new google.maps.Map(mapCanvas, mapOptions);
+    var marker = new google.maps.Marker({position:myCenter});
+    marker.setMap(map);
+  }
+  </script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
 </body>
 </html>
