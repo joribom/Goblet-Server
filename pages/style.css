@@ -84,7 +84,6 @@ a.button:hover, a.button:active {
 }
 
 #players td, #players th {
-    border: 2px solid black;
     padding: 8px;
 }
 
