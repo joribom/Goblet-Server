@@ -30,17 +30,19 @@ func AddUser(userName, email string, passw int) error {
     defer db.Close()
     checkErr(err)
     var lastInsertId int
-    pqErr := db.QueryRow("INSERT INTO users (username, email, passw) VALUES ($1, $2, $3) RETURNING id;",
-                          userName, email, passw).Scan(&lastInsertId).(*pq.Error)
-    if pqErr.Code.Name() == "unique_violation"{
+    err = db.QueryRow("INSERT INTO users (username, email, passw) VALUES ($1, $2, $3) RETURNING id;",
+                        userName, email, passw).Scan(&lastInsertId)
+    if err == nil {
+        fmt.Println("last inserted id =", lastInsertId)
+        return nil
+    } else if pqErr := err.(*pq.Error); pqErr.Code.Name() == "unique_violation"{
         if pqErr.Constraint == "unique_email" {
             return &EmailBusyError{"That email has already been signed up."}
         } else if pqErr.Constraint == "unique_user" {
             return &UsernameBusyError{"That username is already taken."}
         }
     }
-    fmt.Println("last inserted id =", lastInsertId)
-    return nil
+    return err
 }
 
 func Connect(){

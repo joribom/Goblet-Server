@@ -52,10 +52,20 @@ func clearSession(response http.ResponseWriter) {
 
 func loginHandler(response http.ResponseWriter, request *http.Request) {
 	name := request.FormValue("name")
+	email := request.FormValue("email")
 	pass := request.FormValue("password")
 	redirectTarget := "/"
-	if name != "" && pass != "" {
-		// .. check credentials ..
+	err := goblet.AddUser(name, email, 1)
+	if err != nil {
+		switch err.(type) {
+		case *goblet.UsernameBusyError:
+			redirectTarget = "/usernamebusy"
+		case *goblet.EmailBusyError:
+			redirectTarget = "/emailbusy"
+		default:
+			panic(err)
+		}
+	} else {
 		setSession(name, response)
 		redirectTarget = "/internal"
 	}
@@ -73,10 +83,12 @@ func logoutHandler(response http.ResponseWriter, request *http.Request) {
 // index page
 
 const indexPage = `
-<h1>Login</h1>
+<h1>Create new user</h1>
 <form method="post" action="/login">
     <label for="name">User name</label>
     <input type="text" id="name" name="name">
+    <label for="email">E-mail</label>
+    <input type="text" id="email" name="email">
     <label for="password">Password</label>
     <input type="password" id="password" name="password">
     <button type="submit">Login</button>
@@ -85,6 +97,21 @@ const indexPage = `
 
 func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	fmt.Fprintf(response, indexPage)
+}
+
+const userNameTakenPage = `
+<h1>That username is taken!</h1>
+`
+
+func userNameTakenPageHandler(response http.ResponseWriter, request *http.Request) {
+	fmt.Fprintf(response, userNameTakenPage)
+}
+const emailTakenPage = `
+<h1>That email has already been signed up!</h1>
+`
+
+func emailTakenPageHandler(response http.ResponseWriter, request *http.Request) {
+	fmt.Fprintf(response, emailTakenPage)
 }
 
 // internal page
@@ -112,20 +139,6 @@ func internalPageHandler(response http.ResponseWriter, request *http.Request) {
 var router = mux.NewRouter()
 
 func main() {
-
-	err := goblet.AddUser("test", "test@test.com", 1234)
-	if err != nil {
-		switch err.(type) {
-		case *goblet.UsernameBusyError:
-			fmt.Println(err.Error())
-		case *goblet.EmailBusyError:
-			fmt.Println(err.Error())
-		default:
-			panic(err)
-		}
-	} else {
-		fmt.Printf("No error?!")
-	}
 	goblet.Connect()
 
 	router.HandleFunc("/", indexPageHandler)
@@ -134,6 +147,9 @@ func main() {
 	router.HandleFunc("/login", loginHandler).Methods("POST")
 	router.HandleFunc("/logout", logoutHandler).Methods("POST")
 
+	router.HandleFunc("/usernamebusy", userNameTakenPageHandler)
+	router.HandleFunc("/emailbusy", emailTakenPageHandler)
+
 	http.Handle("/", router)
-	http.ListenAndServe(":8000", nil)
+	http.ListenAndServe(":9090", nil)
 }
