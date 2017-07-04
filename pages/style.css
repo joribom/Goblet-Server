@@ -1,7 +1,7 @@
 body {
     background: background.png;
     background-repeat:   no-repeat;
-    background-position: center top;   
+    background-position: center top;
 }
 
 ul {
@@ -12,8 +12,23 @@ ul {
     background-color: #333333;
 }
 
+ul.a {
+  list-style-type: square;
+  list-style-position: inside;
+}
+
 li {
     float: left;
+}
+
+ul.a li {
+  float: none;
+}
+
+
+li a img {
+    display: block;
+    padding: 0px;
 }
 
 li a {
@@ -23,6 +38,21 @@ li a {
     padding: 20px;
     text-decoration: none;
 }
+
+#map {
+  margin: auto;
+  border: 10px solid #333333;
+  padding: 20px;
+}
+
+#info {
+  margin: auto;
+  border: 20px solid #333333;
+  background-color: #333333;
+  color: white;
+  padding: 10px;
+}
+
 
 li a.active {
     background-color: #4CAF50;
@@ -34,3 +64,37 @@ li a:hover:not(.active) {
     color: white;
 }
 
+a.button:link, a.button:visited {
+    border-radius: 25px;
+    background-color: #f44336;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+a.button:hover, a.button:active {
+    background-color: red;
+}
+
+#players {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#players td, #players th {
+    padding: 8px;
+}
+
+#players tr:nth-child(even){background-color: #555;}
+
+#players tr:hover {background-color: #330000;}
+
+#players th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}

@@ -1,3 +1,8 @@
+/*
+ *  DEPRECATED
+ *  Has since 2016-12-28 been replaced with apache2
+ */
+
 package main
 
 import (
