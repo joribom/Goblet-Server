@@ -6,6 +6,8 @@ import (
 	"github.com/gorilla/securecookie"
 	"net/http"
 	"goblet"
+	"log"
+	"os"
 )
 
 // cookie handling
@@ -141,6 +143,9 @@ var router = mux.NewRouter()
 func main() {
 	goblet.Connect()
 
+	fullchain := fmt.Sprintf("%s/fullchain.pem", os.Getenv("HTTPSKEYDIR"))
+	privkey := fmt.Sprintf("%s/privkey.pem", os.Getenv("HTTPSKEYDIR"))
+
 	router.HandleFunc("/", indexPageHandler)
 	router.HandleFunc("/internal", internalPageHandler)
 
@@ -149,7 +154,10 @@ func main() {
 
 	router.HandleFunc("/usernamebusy", userNameTakenPageHandler)
 	router.HandleFunc("/emailbusy", emailTakenPageHandler)
-
 	http.Handle("/", router)
-	http.ListenAndServe(":9090", nil)
+
+    err := http.ListenAndServeTLS(":9090", fullchain, privkey, nil)
+    if err != nil {
+        log.Fatal("ListenAndServe: ", err)
+    }
 }
